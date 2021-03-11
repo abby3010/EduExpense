@@ -1,5 +1,5 @@
-import 'package:expense_manager/blocs/category_bloc.dart';
-import 'package:expense_manager/models/category_model.dart';
+import 'package:eduexpense/blocs/category_bloc.dart';
+import 'package:eduexpense/models/category_model.dart';
 import 'package:flutter/material.dart';
 
 class AddCategory extends StatefulWidget {
