@@ -1,7 +1,6 @@
 import 'package:eduexpense/authentication/auth_service.dart';
+import 'package:eduexpense/authentication/loginPageUI.dart';
 import 'package:eduexpense/screens/feedbackScreen.dart';
-import 'package:eduexpense/screens/loginPage.dart';
-import 'package:eduexpense/screens/myProfileScreen.dart';
 import 'package:eduexpense/utils/landingPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +32,7 @@ class MyApp extends StatelessWidget {
         routes: {
           "/": (context) => LandingPage(),
           "/home": (context) => HomePage(),
-          "/login": (context) => LoginPage(),
-          "/myProfile": (context) => MyProfileScreen(),
+          "/login": (context) => LoginPageUI(),
           "/feedback": (context) => FeedbackScreen(),
         },
       ),

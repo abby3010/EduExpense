@@ -1,6 +1,6 @@
 import 'package:eduexpense/authentication/auth_service.dart';
+import 'package:eduexpense/authentication/loginPageUI.dart';
 import 'package:eduexpense/homepage.dart';
-import 'package:eduexpense/screens/loginPage.dart';
 import 'package:eduexpense/utils/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +20,7 @@ class LandingPage extends StatelessWidget {
             );
           } else {
             final user = snapshot.data;
-            return user == null ? LoginPage() : HomePage();
+            return user == null ? LoginPageUI() : HomePage();
           }
         });
   }

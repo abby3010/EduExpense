@@ -1,9 +1,8 @@
-import 'package:eduexpense/authentication/auth_service.dart';
+import 'package:eduexpense/screens/newsScreen.dart';
+import 'package:eduexpense/utils/financeData.dart';
 import 'package:eduexpense/utils/navdrawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,7 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   String hometext = "Hola Amigos!\nThe project is on!";
   @override
   Widget build(BuildContext context) {
@@ -32,14 +30,96 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Center(
-        child: Text(hometext, style: TextStyle(fontSize: 20),),
+        child: Column(
+          children: [
+            // All the Financial Data in the top horizontal list comes from here!!!
+            FinanceDataWidget(),
+
+            // News Section
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                "Latest Finance News",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+              ),
+            ),
+
+            StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection("Finance Data")
+                  .doc("news")
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  var newsDoc = snapshot.data.data();
+
+                  return Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: newsDoc["news"].length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: Column(
+                              children: [
+                                ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: newsDoc["news"][index]
+                                                ["image_url"] !=
+                                            null
+                                        ? Image.network(
+                                            newsDoc["news"][index]["image_url"],
+                                            )
+                                        : Image.asset("assets/images/news.png",
+                                            )),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                newsDoc["news"][index]["headline"],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NewsScreen(
+                                  url: newsDoc["news"][index]
+                                  ["url"],
+                                ),),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  );
+                }
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      "Sorry we could not fetch data!\nSome error occured",
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                }
+                return CircularProgressIndicator();
+              },
+            )
+          ],
+        ),
       ),
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Nothing Happens as of now
           setState(() {
-              hometext = "Nothing happens as of now! xD";
+            hometext = "Nothing happens as of now! xD";
           });
         },
         child: Icon(Icons.add),
